@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Assesment</title>
+</head>
+<body>
+	   <form name="form1" method="post">
+                              {% csrf_token%}
+
+                               <div class="col-md-12 no-padding"><b>Assesment</b></div>
+                               <br>
+                               <br>
+                      <div class="col-md-6 no-padding">
+                          <table  width="50%" cellspacing="1" cellpadding="1"  >
+                              <thead>
+                                  <tr>
+                                  <th ><b>From Date</b></th>
+                                  <th ><b>To Date</b></th>
+                                  <th></th>
+                              </tr>
+                               <tr>
+                                  <th ><input type="text" name="date1" id="date1"></th>
+                                  <th ><input type="text" name="date2" id="date2"></th>
+                                  <th><center>
+                        <button type="button" class="btn bg-success btn-xs" id="search" onclick="datasearch(true)" >Search</button></center></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                          	
+                <table class="table " style="border:1px solid;">
+                  <thead>
+                    <tr class="bg-head" style="border:1px solid;">
+                       <th>Subcategory</th>
+                      <th>Intest point</th>
+                  
+                    </tr>
+                  </thead>
+                  <tbody id="data_list" style="border:1px solid;">
+                  </tbody>
+
+                </table>
+        
+
+
+
+
+                          </tbody>
+
+
+ <!-- <div class="col-md-6 no-padding"> <img src="file:///home/veena/jeeb/new.jpg"></div> -->
+
+                  </form>
+                  <div class="col-md-6 no-padding"> <img src="home/veena/jeeb/my_plot.png">  </div>
+                     
+<img src="./media/barchart.png" />
+</body>
+</html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script type="text/javascript">
+
+function datasearch(flag) {
+	alert("aaa")
+        
+
+          from_date = $('#date1').val();
+          to_date = $('#date2').val();
+alert(from_date)
+alert(to_date)
+
+
+  $.ajax({
+           headers: {
+               "X-CSRFToken": getCookie('csrftoken')
+           },
+           url: "/get_data_fromdb",
+           type: "POST",
+           dataType: "JSON",
+           async: false,
+          data: {
+
+            'fromdate': from_date ,
+            'todate': to_date,
+          },
+           success: function(data) {
+               // Command: toastr["success"]('Successfully Updated');
+               var new_result = data.data.new_result;
+                var page_count=data.page_count;
+               console.log(new_result.length,'lllllllllllll')
+               $("#data_list").empty();
+              
+
+               count =0 
+                $.each(new_result, function(key, value) {
+                  
+                  count=count+1;
+                  $("#data_list").append("<tr><td>" + value.sub_category_id + " </td> <td>" + value.intrest_point + " </td> </tr>");
+
+                });
+
+
+
+
+
+
+           },
+
+ });
+
+       }
+        function getCookie(name) {
+    var dc = document.cookie;
+    var prefix = name + "=";
+    var begin = dc.indexOf("; " + prefix);
+    if (begin == -1) {
+        begin = dc.indexOf(prefix);
+        if (begin != 0) return null;
+    }
+    else
+    {
+        begin += 2;
+        var end = document.cookie.indexOf(";", begin);
+        if (end == -1) {
+        end = dc.length;
+        }
+    }
+    // because unescape has been deprecated, replaced with decodeURI
+    //return unescape(dc.substring(begin + prefix.length, end));
+    return decodeURI(dc.substring(begin + prefix.length, end));
+}
+   </script>

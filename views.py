@@ -27,7 +27,6 @@ from jeeb.settings import *
 
 class index(base.View):
     def get(self, request):
-        # return redirect('ocr/filelist')
 
         return render(request, 'index.html')
 
